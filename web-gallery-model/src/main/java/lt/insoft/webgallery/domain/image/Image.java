@@ -1,7 +1,9 @@
 package lt.insoft.webgallery.domain.image;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,5 +22,8 @@ public class Image {
     private String description;
 
     private LocalDateTime dateTime;
+
+    @Lob
+    private byte[] picBytes;
 
 }
