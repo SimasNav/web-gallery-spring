@@ -1,12 +1,14 @@
 package lt.insoft.webgallery.domain.image;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lt.insoft.webgallery.domain.image.tag.Tag;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,11 +21,22 @@ public class Image {
 
     private String name;
 
+    private String type;
+
     private String description;
 
     private LocalDateTime dateTime;
 
     @Lob
     private byte[] picBytes;
+
+    @Lob
+    private byte[] thumbnailBytes;
+
+    @ManyToMany
+    @JoinTable(name = "IMAGE_TAG",
+    joinColumns = @JoinColumn(name = "IMAGE_ID"),
+    inverseJoinColumns = @JoinColumn(name ="TAG_ID"))
+    private List<Tag> tags = new ArrayList<>();
 
 }
