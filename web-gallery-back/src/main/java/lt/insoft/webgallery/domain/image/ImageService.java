@@ -59,6 +59,22 @@ public class ImageService {
         imageRepository.save(image);
     }
 
+    public void updateImageInfo(Long id, ImageDto imageDto) {
+        Image image = findImageById(id);
+        image.setName(imageDto.getName());
+        image.setDescription(imageDto.getDescription());
+        image.setType(imageDto.getType());
+        this.imageRepository.save(image);
+    }
+
+    public void updateImagePhoto(Long id, MultipartFile file) throws IOException {
+        Image image = findImageById(id);
+        byte[] picBytes = file.getBytes();
+        image.setPicBytes(picBytes);
+        image.setThumbnailBytes(makeThumbnail(picBytes,FilenameUtils.getExtension(file.getOriginalFilename())));
+        this.imageRepository.save(image);
+    }
+
     public void deleteImage(Long id) {
         Image image = findImageById(id);
         this.imageRepository.delete(image);

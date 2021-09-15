@@ -29,9 +29,21 @@ public class ImageController {
     }
 
     @PostMapping()
-    public void uploadImage(@RequestPart("imageFile") MultipartFile file, @RequestPart("tags") DescriptionDto description) throws IOException {
+    public void uploadImage(@RequestPart("imageFile") MultipartFile file,
+                            @RequestPart("tags") DescriptionDto description) throws IOException {
         this.imageService.uploadImage(file, description);
     }
+
+    @PutMapping("/update-info/{id}")
+    public void updateImageInfo(@PathVariable Long id, @RequestBody ImageDto imageDto){
+        imageService.updateImageInfo(id,imageDto);
+    }
+
+    @PutMapping("/update-photo/{id}")
+    public void updateImagePhoto(@PathVariable Long id, @RequestPart("imageFile") MultipartFile file) throws IOException {
+        this.imageService.updateImagePhoto(id,file);
+    }
+
 
     @DeleteMapping("/{id}")
     public void deleteImage(@PathVariable Long id) {
