@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,7 @@ public class ImageService {
                 .collect(Collectors.toList());
         return imageDtoList;
     }
+
 
     public ImageDto getImageDtoById(Long id) {
         Image image = findImageById(id);
@@ -80,6 +80,11 @@ public class ImageService {
         this.imageRepository.delete(image);
     }
 
+    public List<ImageDto> findAllImagesBySearchField(String searchField) {
+        List<Image> images = imageRepository.findAll(ImageSpecifications.search(searchField));
+        return getAllImagesDto(images);
+    }
+
     private ImageDto fillImageDto(Image image) {
         ImageDto imageDto = new ImageDto();
         imageDto.setId(image.getId());
@@ -111,5 +116,12 @@ public class ImageService {
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         ImageIO.write(scaledImage, format, boas);
         return boas.toByteArray();
+    }
+
+    private List<ImageDto> getAllImagesDto(List<Image> images) {
+        List<ImageDto> imageDtoList = images.stream()
+                .map(this::fillImageDto)
+                .collect(Collectors.toList());
+        return imageDtoList;
     }
 }
