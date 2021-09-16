@@ -92,8 +92,8 @@ public class ImageService {
         imageDto.setName(image.getName());
         imageDto.setType(image.getType());
         imageDto.setDateTime(image.getDateTime());
-        imageDto.setPicBytes(image.getPicBytes());
-        imageDto.setThumbnailBytes(image.getThumbnailBytes());
+        //imageDto.setPicBytes(image.getPicBytes());
+        //imageDto.setThumbnailBytes(image.getThumbnailBytes());
         imageDto.setTags(getImageTagsDto(image));
         return imageDto;
     }
