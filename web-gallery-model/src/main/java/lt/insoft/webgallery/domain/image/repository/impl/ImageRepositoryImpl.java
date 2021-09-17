@@ -3,6 +3,8 @@ package lt.insoft.webgallery.domain.image.repository.impl;
 import lt.insoft.webgallery.domain.image.dto.ImageDto;
 import lt.insoft.webgallery.domain.image.model.Image;
 import lt.insoft.webgallery.domain.image.model.Image_;
+import lt.insoft.webgallery.domain.image.model.Tag;
+import lt.insoft.webgallery.domain.image.model.Tag_;
 import lt.insoft.webgallery.domain.image.repository.ImageRepository;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
@@ -11,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Transactional
@@ -37,4 +37,5 @@ public class ImageRepositoryImpl extends SimpleJpaRepository<Image, Long> implem
         cq.where(cb.like(cb.lower(root.get(Image_.name)), "%" + imageName + "%"));
         return em.createQuery(cq).getResultList();
     }
+
 }

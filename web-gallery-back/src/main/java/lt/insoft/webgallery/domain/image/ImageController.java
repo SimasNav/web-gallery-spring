@@ -4,6 +4,7 @@ package lt.insoft.webgallery.domain.image;
 import lombok.RequiredArgsConstructor;
 import lt.insoft.webgallery.domain.image.dto.DescriptionDto;
 import lt.insoft.webgallery.domain.image.dto.ImageDto;
+import lt.insoft.webgallery.domain.image.exception.BadImageException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/image")
-@CrossOrigin
 @RequiredArgsConstructor
 public class ImageController {
 
@@ -40,16 +40,14 @@ public class ImageController {
     }
 
     @PutMapping("/update-photo/{id}")
-    public void updateImagePhoto(@PathVariable Long id, @RequestPart("imageFile") MultipartFile file) throws IOException {
+    public void updateImagePhoto(@PathVariable Long id, @RequestPart("imageFile") MultipartFile file) throws BadImageException {
         this.imageService.updateImagePhoto(id, file);
     }
-
 
     @DeleteMapping("/{id}")
     public void deleteImage(@PathVariable Long id) {
         this.imageService.deleteImage(id);
     }
-
 
     /**
      * Search methods using Specifications API, multiselect
@@ -61,9 +59,7 @@ public class ImageController {
     }
 
     @GetMapping("/search/multiselect/{searchField}")
-    public List<ImageDto> findAllImagesByImageNameWithMultiSelect(@PathVariable String searchField){
+    public List<ImageDto> findAllImagesByImageNameWithMultiSelect(@PathVariable String searchField) {
         return this.imageService.findAllImagesByImageNameWithMultiSelect(searchField);
     }
-
-
 }

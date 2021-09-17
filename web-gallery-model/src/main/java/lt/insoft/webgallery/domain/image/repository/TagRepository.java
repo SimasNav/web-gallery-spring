@@ -1,4 +1,4 @@
-package lt.insoft.webgallery.domain.image.tag;
+package lt.insoft.webgallery.domain.image.repository;
 
 import lt.insoft.webgallery.domain.image.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;

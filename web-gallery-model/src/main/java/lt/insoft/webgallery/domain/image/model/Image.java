@@ -2,6 +2,8 @@ package lt.insoft.webgallery.domain.image.model;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lt.insoft.webgallery.domain.image.model.Tag;
 
 import javax.persistence.*;
@@ -9,8 +11,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
+@Getter
+@Setter
+@Data
 public class Image {
 
 
