@@ -1,9 +1,9 @@
-package lt.insoft.webgallery.domain.image;
+package lt.insoft.webgallery.domain.image.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lt.insoft.webgallery.domain.image.tag.TagDto;
+import lt.insoft.webgallery.domain.image.dto.TagDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageDto {
+
+    public ImageDto(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
 
     private Long id;
 

@@ -1,4 +1,4 @@
-package lt.insoft.webgallery.domain.image.tag;
+package lt.insoft.webgallery.domain.image.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

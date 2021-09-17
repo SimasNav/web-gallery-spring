@@ -1,8 +1,15 @@
 package lt.insoft.webgallery.domain.image;
 
-import lt.insoft.webgallery.domain.image.tag.Tag;
-import lt.insoft.webgallery.domain.image.tag.TagDto;
-import lt.insoft.webgallery.domain.image.tag.TagRepository;
+import lombok.RequiredArgsConstructor;
+import lt.insoft.webgallery.domain.image.dto.DescriptionDto;
+import lt.insoft.webgallery.domain.image.dto.ImageDto;
+import lt.insoft.webgallery.domain.image.exception.BadImageException;
+import lt.insoft.webgallery.domain.image.exception.ImageNotFoundException;
+import lt.insoft.webgallery.domain.image.model.Image;
+import lt.insoft.webgallery.domain.image.model.Tag;
+import lt.insoft.webgallery.domain.image.dto.TagDto;
+import lt.insoft.webgallery.domain.image.repository.ImageRepository;
+import lt.insoft.webgallery.domain.image.repository.TagRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
@@ -19,15 +26,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-    private ImageRepository imageRepository;
-    private TagRepository tagRepository;
-
-    public ImageService(ImageRepository imageRepository, TagRepository tagRepository) {
-        this.imageRepository = imageRepository;
-        this.tagRepository = tagRepository;
-    }
+    private final ImageRepository imageRepository;
+    private final TagRepository tagRepository;
 
     public List<ImageDto> getAllImagesDto() {
         List<Image> images = imageRepository.findAll();
@@ -67,11 +70,16 @@ public class ImageService {
         this.imageRepository.save(image);
     }
 
-    public void updateImagePhoto(Long id, MultipartFile file) throws IOException {
+    public void updateImagePhoto(Long id, MultipartFile file) throws BadImageException {
         Image image = findImageById(id);
-        byte[] picBytes = file.getBytes();
-        image.setPicBytes(picBytes);
-        image.setThumbnailBytes(makeThumbnail(picBytes,FilenameUtils.getExtension(file.getOriginalFilename())));
+        try {
+            byte[] picBytes = file.getBytes();
+            image.setPicBytes(picBytes);
+            image.setThumbnailBytes(makeThumbnail(picBytes, FilenameUtils.getExtension(file.getOriginalFilename())));
+        } catch (IOException e) {
+            throw new BadImageException("Cannot save binary data", e);
+        }
+
         this.imageRepository.save(image);
     }
 
@@ -83,6 +91,10 @@ public class ImageService {
     public List<ImageDto> findAllImagesBySearchField(String searchField) {
         List<Image> images = imageRepository.findAll(ImageSpecifications.search(searchField));
         return getAllImagesDto(images);
+    }
+
+    public List<ImageDto> findAllImagesByImageNameWithMultiSelect(String imageName) {
+        return imageRepository.findAllImagesByImageNameWithMultiSelect(imageName);
     }
 
     private ImageDto fillImageDto(Image image) {

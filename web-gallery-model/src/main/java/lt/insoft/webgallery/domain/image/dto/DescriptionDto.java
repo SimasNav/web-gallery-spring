@@ -1,4 +1,4 @@
-package lt.insoft.webgallery.domain.image;
+package lt.insoft.webgallery.domain.image.dto;
 
 import lombok.Data;
 
