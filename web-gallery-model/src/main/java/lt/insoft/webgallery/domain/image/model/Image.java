@@ -1,9 +1,8 @@
-package lt.insoft.webgallery.domain.image;
+package lt.insoft.webgallery.domain.image.model;
 
 
 import lombok.Data;
-import lt.insoft.webgallery.domain.image.tag.Tag;
-import org.hibernate.annotations.Fetch;
+import lt.insoft.webgallery.domain.image.model.Tag;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 public class Image {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

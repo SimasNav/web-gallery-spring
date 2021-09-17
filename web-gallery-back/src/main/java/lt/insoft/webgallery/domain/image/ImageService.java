@@ -1,7 +1,13 @@
 package lt.insoft.webgallery.domain.image;
 
-import lt.insoft.webgallery.domain.image.tag.Tag;
-import lt.insoft.webgallery.domain.image.tag.TagDto;
+import lombok.RequiredArgsConstructor;
+import lt.insoft.webgallery.domain.image.dto.DescriptionDto;
+import lt.insoft.webgallery.domain.image.dto.ImageDto;
+import lt.insoft.webgallery.domain.image.exception.ImageNotFoundException;
+import lt.insoft.webgallery.domain.image.model.Image;
+import lt.insoft.webgallery.domain.image.model.Tag;
+import lt.insoft.webgallery.domain.image.dto.TagDto;
+import lt.insoft.webgallery.domain.image.repository.ImageRepository;
 import lt.insoft.webgallery.domain.image.tag.TagRepository;
 import org.apache.commons.io.FilenameUtils;
 import org.imgscalr.Scalr;
@@ -19,15 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-    private ImageRepository imageRepository;
-    private TagRepository tagRepository;
-
-    public ImageService(ImageRepository imageRepository, TagRepository tagRepository) {
-        this.imageRepository = imageRepository;
-        this.tagRepository = tagRepository;
-    }
+    private final ImageRepository imageRepository;
+    private final TagRepository tagRepository;
 
     public List<ImageDto> getAllImagesDto() {
         List<Image> images = imageRepository.findAll();
@@ -71,7 +73,7 @@ public class ImageService {
         Image image = findImageById(id);
         byte[] picBytes = file.getBytes();
         image.setPicBytes(picBytes);
-        image.setThumbnailBytes(makeThumbnail(picBytes,FilenameUtils.getExtension(file.getOriginalFilename())));
+        image.setThumbnailBytes(makeThumbnail(picBytes, FilenameUtils.getExtension(file.getOriginalFilename())));
         this.imageRepository.save(image);
     }
 
@@ -123,5 +125,9 @@ public class ImageService {
                 .map(this::fillImageDto)
                 .collect(Collectors.toList());
         return imageDtoList;
+    }
+
+    public List<ImageDto> findAllImagesByImageNameWithMultiSelect(String imageName) {
+        return imageRepository.findAllImagesByImageNameWithMultiSelect(imageName);
     }
 }

@@ -1,5 +1,6 @@
 package lt.insoft.webgallery.domain.image;
 
+import lt.insoft.webgallery.domain.image.exception.ImageNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

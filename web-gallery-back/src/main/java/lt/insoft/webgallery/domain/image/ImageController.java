@@ -2,6 +2,8 @@ package lt.insoft.webgallery.domain.image;
 
 
 import lombok.RequiredArgsConstructor;
+import lt.insoft.webgallery.domain.image.dto.DescriptionDto;
+import lt.insoft.webgallery.domain.image.dto.ImageDto;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,12 +52,17 @@ public class ImageController {
 
 
     /**
-     * Search methods using Specifications API
+     * Search methods using Specifications API, multiselect
      */
 
     @GetMapping("/search/{searchField}")
     public List<ImageDto> findAllImagesBySearchField(@PathVariable String searchField) {
         return this.imageService.findAllImagesBySearchField(searchField);
+    }
+
+    @GetMapping("/search/multiselect/{searchField}")
+    public List<ImageDto> findAllImagesByImageNameWithMultiSelect(@PathVariable String searchField){
+        return this.imageService.findAllImagesByImageNameWithMultiSelect(searchField);
     }
 
 

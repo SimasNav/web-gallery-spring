@@ -1,8 +1,7 @@
-package lt.insoft.webgallery.domain.image.tag;
+package lt.insoft.webgallery.domain.image.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lt.insoft.webgallery.domain.image.Image;
 
 import javax.persistence.*;
 import java.util.ArrayList;
