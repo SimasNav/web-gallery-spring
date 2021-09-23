@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lt.insoft.webgallery.domain.image.dto.TagDto;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +30,10 @@ public class ImageDto {
     private LocalDateTime DateTime;
 
     private List<TagDto> tags;
+
+    private String thumbnailPicBytesToAngular;
+
+    private String originalPicBytesToAngular;
 
     private byte[] picBytes;
 

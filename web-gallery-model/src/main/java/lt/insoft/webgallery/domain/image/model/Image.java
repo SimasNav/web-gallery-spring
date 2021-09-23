@@ -23,18 +23,24 @@ public class Image {
     @Column(name = "ID")
     private Long id;
 
+    @Column(name = "NAME")
     private String name;
 
+    @Column(name = "TYPE")
     private String type;
 
+    @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "DATE_TIME")
     private LocalDateTime dateTime;
 
     @Lob
+    @Column(name = "PIC_BYTES")
     private byte[] picBytes;
 
     @Lob
+    @Column(name = "THUMBNAIL_BYTES")
     private byte[] thumbnailBytes;
 
     @ManyToMany

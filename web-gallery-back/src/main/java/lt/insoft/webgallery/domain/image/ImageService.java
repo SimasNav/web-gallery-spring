@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,37 +42,31 @@ public class ImageService {
         return imageDtoList;
     }
 
-
     public ImageDto getImageDtoById(Long id) {
         Image image = findImageById(id);
         return fillImageDto(image);
     }
 
-    public void uploadImage(MultipartFile file, DescriptionDto description) throws IOException {
+    public Long uploadImage(MultipartFile file) throws IOException {
         Image image = new Image();
         image.setName(file.getOriginalFilename());
         image.setType(file.getContentType());
-        image.setDescription(description.getDescription());
         image.setDateTime(LocalDateTime.now());
         image.setPicBytes(file.getBytes());
         image.setThumbnailBytes(makeThumbnail(file.getBytes(), FilenameUtils.getExtension(file.getOriginalFilename())));
-        for (String tagName : description.getTagsNames()) {
-            Tag tag = new Tag(tagName);
-            image.getTags().add(tag);
-            tagRepository.save(tag);
-        }
-        imageRepository.save(image);
+        Image savedImage = imageRepository.save(image);
+        return savedImage.getId();
     }
 
     public void updateImageInfo(Long id, ImageDto imageDto) {
         Image image = findImageById(id);
         image.setName(imageDto.getName());
         image.setDescription(imageDto.getDescription());
-        image.setType(imageDto.getType());
+        image.setTags(getTagListFromTagDto(imageDto.getTags()));
         this.imageRepository.save(image);
     }
 
-    public void updateImagePhoto(Long id, MultipartFile file) throws BadImageException {
+    public Long updateImagePhoto(Long id, MultipartFile file) throws BadImageException {
         Image image = findImageById(id);
         try {
             byte[] picBytes = file.getBytes();
@@ -80,7 +76,8 @@ public class ImageService {
             throw new BadImageException("Cannot save binary data", e);
         }
 
-        this.imageRepository.save(image);
+        Image savedImage = this.imageRepository.save(image);
+        return savedImage.getId();
     }
 
     public void deleteImage(Long id) {
@@ -104,8 +101,10 @@ public class ImageService {
         imageDto.setName(image.getName());
         imageDto.setType(image.getType());
         imageDto.setDateTime(image.getDateTime());
-        //imageDto.setPicBytes(image.getPicBytes());
-        //imageDto.setThumbnailBytes(image.getThumbnailBytes());
+        imageDto.setPicBytes(image.getPicBytes());
+        imageDto.setThumbnailBytes(image.getThumbnailBytes());
+        imageDto.setThumbnailPicBytesToAngular("data:" + imageDto.getType() + ";base64," + Base64.getEncoder().encodeToString(imageDto.getThumbnailBytes()));
+        imageDto.setOriginalPicBytesToAngular("data:" + imageDto.getType() + ";base64," + Base64.getEncoder().encodeToString(imageDto.getPicBytes()));
         imageDto.setTags(getImageTagsDto(image));
         return imageDto;
     }
@@ -124,7 +123,7 @@ public class ImageService {
     private byte[] makeThumbnail(byte[] picBytes, String format) throws IOException {
         InputStream is = new ByteArrayInputStream(picBytes);
         BufferedImage srcImage = ImageIO.read(is);
-        BufferedImage scaledImage = Scalr.resize(srcImage, 100);
+        BufferedImage scaledImage = Scalr.resize(srcImage, 250);
         ByteArrayOutputStream boas = new ByteArrayOutputStream();
         ImageIO.write(scaledImage, format, boas);
         return boas.toByteArray();
@@ -135,5 +134,15 @@ public class ImageService {
                 .map(this::fillImageDto)
                 .collect(Collectors.toList());
         return imageDtoList;
+    }
+
+    private List<Tag> getTagListFromTagDto(List<TagDto> tagDtos){
+        List<Tag> returnTagList = new ArrayList<>();
+        for(TagDto tagDto : tagDtos){
+            Tag tag = new Tag(tagDto.getTagName());
+            tagRepository.save(tag);
+            returnTagList.add(tag);
+        }
+        return returnTagList;
     }
 }

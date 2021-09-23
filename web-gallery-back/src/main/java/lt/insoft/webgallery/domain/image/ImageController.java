@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/image")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:4200")
 public class ImageController {
 
     private final ImageService imageService;
@@ -29,9 +30,8 @@ public class ImageController {
     }
 
     @PostMapping()
-    public void uploadImage(@RequestPart("imageFile") MultipartFile file,
-                            @RequestPart("tags") DescriptionDto description) throws IOException {
-        this.imageService.uploadImage(file, description);
+    public Long uploadImage(@RequestPart("imageFile") MultipartFile file) throws IOException {
+       return this.imageService.uploadImage(file);
     }
 
     @PutMapping("/update-info/{id}")
@@ -40,8 +40,8 @@ public class ImageController {
     }
 
     @PutMapping("/update-photo/{id}")
-    public void updateImagePhoto(@PathVariable Long id, @RequestPart("imageFile") MultipartFile file) throws BadImageException {
-        this.imageService.updateImagePhoto(id, file);
+    public Long updateImagePhoto(@PathVariable Long id, @RequestPart("imageFile") MultipartFile file) throws BadImageException {
+        return this.imageService.updateImagePhoto(id, file);
     }
 
     @DeleteMapping("/{id}")
