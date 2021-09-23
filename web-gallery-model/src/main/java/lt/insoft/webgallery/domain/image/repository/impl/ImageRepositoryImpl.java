@@ -6,6 +6,7 @@ import lt.insoft.webgallery.domain.image.model.Image_;
 import lt.insoft.webgallery.domain.image.model.Tag;
 import lt.insoft.webgallery.domain.image.model.Tag_;
 import lt.insoft.webgallery.domain.image.repository.ImageRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +38,4 @@ public class ImageRepositoryImpl extends SimpleJpaRepository<Image, Long> implem
         cq.where(cb.like(cb.lower(root.get(Image_.name)), "%" + imageName + "%"));
         return em.createQuery(cq).getResultList();
     }
-
 }

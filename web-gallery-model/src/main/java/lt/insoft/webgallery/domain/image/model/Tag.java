@@ -19,6 +19,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "TAG_NAME")
     private String tagName;
 
     public Tag(String tagName) {
